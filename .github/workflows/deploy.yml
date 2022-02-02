@@ -1,0 +1,40 @@
+name: deploy
+
+on:
+  workflow_run:
+    workflows: "push"
+    branches:
+      - 'master'
+      - 'main'
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Declare some variables
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          # Required, playbook filepath
+          playbook: playbook.yml
+          # Optional, directory where playbooks live
+          directory: ./.ansible
+          # Optional, SSH private key
+          key: ${{secrets.DEMO_SSH_KEY}}
+          # Optional, galaxy requirements filepath
+          requirements: "roles/requirements.yml"
+          # Optional, additional flags to pass to ansible-playbook
+          # we don't deploy it for real, just launch in dry-run format
+          options: |
+            --inventory inventory/inventory.ini
+            --tags deploy

@@ -1,0 +1,14 @@
+[Unit]
+Description=vuln-app
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=root
+WorkingDirectory=/opt/vuln-app
+ExecStart=/usr/local/bin/docker-compose up
+ExecStop=/usr/local/bin/docker-compose down
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

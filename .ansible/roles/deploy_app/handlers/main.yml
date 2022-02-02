@@ -1,0 +1,15 @@
+- name: Restart app systemd unit
+  systemd:
+    name: app
+    state: restarted
+    daemon_reload: true
+
+- name: Test nginx config
+  command: "nginx -t"
+  notify: Reload nginx
+
+- name: Reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+    daemon_reload: true

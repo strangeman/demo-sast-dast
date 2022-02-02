@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  app:
+    image: unitedtraders/vuln-app:latest
+    ports:
+      - 5000:{{ docker_host_port }}
+    volumes:
+      - type: bind
+        source: /opt/vuln-app/test.db
+        target: /app/test.db
+
+  datadog:
+    image: datadog/agent:latest
+    logging:
+      driver: none
+    environment:
+     - DD_API_KEY=66b5da75-5ab8-4cec-805c-6ab11dd248d5
+     - DD_SITE=datadoghq.eu
+     - DD_LOGS_ENABLED=true
+     - DD_CONTAINER_EXCLUDE_LOGS='image:datadog/agent:latest'
+     - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+     - /proc/:/host/proc/:ro
+     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro

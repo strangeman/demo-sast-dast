@@ -1,0 +1,16 @@
+server {
+    listen       80;
+    server_name  {{ app_domain }} ;
+
+    ssl_dhparam          /etc/nginx/certs/dhparams.pem;
+
+    root /opt/vuln-app;
+
+    location @docker {
+        proxy_pass http://localhost:{{ docker_host_port }};
+    }
+
+    location / {
+         try_files $uri @docker;
+    }
+}

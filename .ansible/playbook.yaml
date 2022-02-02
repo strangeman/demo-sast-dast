@@ -1,0 +1,14 @@
+- hosts: app
+  become: true
+  roles:
+    - role: geerlingguy.nginx
+    - role: geerlingguy.docker
+    - role: deploy_app
+      tags:
+        - deploy
+  vars:
+    docker_install_compose: true
+    docker_compose_version: "1.28.6"
+    docker_compose_path: /usr/local/bin/docker-compose
+  tags:
+    - install
