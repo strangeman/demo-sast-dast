@@ -3,3 +3,4 @@ geerlingguy.docker
 test.db
 __pycache__
 .venv
+results.json
